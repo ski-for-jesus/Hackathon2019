@@ -15,7 +15,7 @@ public class ManagerView extends Application {
 		TilePane tp = new TilePane();
 		Menu createM = new Menu("Create");
 		Menu deleteM = new Menu("Delete");
-		MenuItem newPref = new MenuItem();
+		MenuItem newPref = new MenuItem("New Preference Set");
 		createM.getItems().add(newPref);
 		MenuBar menuPane = new MenuBar();
 		menuPane.getMenus().add(createM);
