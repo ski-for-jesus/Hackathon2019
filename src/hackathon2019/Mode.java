@@ -10,10 +10,11 @@ public class Mode {
 	String modeFileName;
 	List<Process> processList;
 	
-	public Mode(String modeName) {
+	public Mode(String modeName) throws FileNotFoundException, UnsupportedEncodingException {
 		
 		this.name = modeName;
 		this.modeFileName = modeName + "_mode_file";
+		PrintWriter out = new PrintWriter(this.modeFileName, "UTF-8");
 	
 	}
 	
