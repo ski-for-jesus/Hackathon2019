@@ -73,6 +73,12 @@ public class Mode {
 		
 	}
 	
+	public boolean remove(String newName) {
+		
+		return true;
+		
+	}
+	
 	
 	
 }
