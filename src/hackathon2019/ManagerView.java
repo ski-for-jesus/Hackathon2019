@@ -25,5 +25,6 @@ public class ManagerView extends Application {
 		Scene scene = new Scene(bp);
 		stage.setScene(scene);
 		stage.show();
+		
 	}
 }
