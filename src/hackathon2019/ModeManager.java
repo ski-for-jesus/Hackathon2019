@@ -3,20 +3,22 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class ModeManager {
 	
-	List<Mode> modes;
+	Map<String, Mode> modes;
 	
 	public ModeManager() throws FileNotFoundException, UnsupportedEncodingException {
 		
 		this.modes = createPrevModes();
 	}
 	
-	public List<Mode> createPrevModes() throws FileNotFoundException, UnsupportedEncodingException {
+	public Map<String, Mode> createPrevModes() throws FileNotFoundException, UnsupportedEncodingException {
 		
-		List<Mode> modes = new ArrayList<Mode>();
+		Map<String, Mode> modes = new HashMap<String, Mode>();
 		File curr = new File(".");
 		File[] fileList = curr.listFiles();
 		for(File f : fileList) {
@@ -24,21 +26,33 @@ public class ModeManager {
 			else if(f.isFile()) {
 				if(f.getName().endsWith("_mode_file")) {
 					Mode temp = new Mode(f.getName(), true);
-					modes.add(temp);
+					modes.put(f.getName().replace("_mode_file", ""), temp);
 				}
 			}
 		}
 		return modes;
 	}
 	
-	public void addMode(String name) throws FileNotFoundException, UnsupportedEncodingException {
+	public boolean addMode(String name) throws FileNotFoundException, UnsupportedEncodingException {
 		
+		if(modes.containsKey(name)) {
+			return false;
+		}
 		Mode temp = new Mode(name, false);
-		modes.add(temp);
+		modes.put(name, temp);
+		return true;
 	}
 	
-	public void removeMode(String name) {
+	public boolean removeMode(String name) {
 		
-		
+		if(!modes.containsKey(name)) {
+			return false;
+		}
+		File file = new File(modes.get(name).modeFileName);
+		if(!file.delete()) {
+			return false;
+		}
+		modes.remove(name);
+		return true;
 	}
 }
