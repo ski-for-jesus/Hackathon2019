@@ -1,5 +1,10 @@
 package hackathon2019;
 
+import java.awt.Desktop;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
@@ -9,10 +14,12 @@ import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextArea;
+import javafx.scene.control.ToolBar;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.TilePane;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
@@ -55,20 +62,18 @@ public class ManagerView extends Application {
 	}
 	
 	private void displayMainPage(Stage stage) {
-		BorderPane bp = new BorderPane();
-		TilePane tp = new TilePane();
-		Menu createM = new Menu("Create");
-		Menu deleteM = new Menu("Delete");
-		MenuItem newPref = new MenuItem("New Preference Set");
-		newPref.setOnAction(e -> {
+		stage.setTitle("Shortcut to Shortcuts");
+		Canvas mainCanvas = new Canvas(400, 100);
+		mainCanvas.requestFocus();
+		BorderPane bp = new BorderPane(mainCanvas);
+		ToolBar toolBar = new ToolBar();
+		Button create = new Button("Create");
+		Button delete = new Button("Delete");
+		toolBar.getItems().addAll(create, delete);
+		bp.setTop(toolBar);
+		create.setOnAction(e -> {
 			displayCustomizationMenu(stage);
 		});
-		createM.getItems().add(newPref);
-		MenuBar menuPane = new MenuBar();
-		menuPane.getMenus().add(createM);
-		menuPane.getMenus().add(deleteM);
-		bp.setCenter(tp);
-		bp.setTop(menuPane);
 		Scene scene = new Scene(bp);
 		stage.setScene(scene);
 		stage.show();
