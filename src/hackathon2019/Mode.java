@@ -8,6 +8,7 @@ public class Mode {
 	
 	public Mode(String modeName) {
 		
+		this.name = modeName;
 		
 	}
 	
