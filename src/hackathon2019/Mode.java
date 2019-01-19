@@ -10,12 +10,17 @@ public class Mode {
 	String modeFileName;
 	List<Process> processList;
 	
-	public Mode(String modeName) throws FileNotFoundException, UnsupportedEncodingException {
+	public Mode(String modeName, boolean prevMode) throws FileNotFoundException, UnsupportedEncodingException {
 		
+		if(prevMode) {
+			this.modeFileName = modeName;
+			this.name = modeName.replace("_mode_file", "");
+			load();
+		} else {
 		this.name = modeName;
 		this.modeFileName = modeName + "_mode_file";
 		PrintWriter out = new PrintWriter(this.modeFileName, "UTF-8");
-	
+		}
 	}
 	
 	public boolean load() {
@@ -43,6 +48,7 @@ public class Mode {
 			
 		}
 		
+		modeFile.close();
 		return true;
 		
 	}
