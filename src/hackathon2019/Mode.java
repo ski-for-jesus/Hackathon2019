@@ -1,5 +1,7 @@
 package hackathon2019;
 import java.io.*;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
 import java.util.*;
 
 public class Mode {
@@ -8,11 +10,17 @@ public class Mode {
 	String modeFileName;
 	List<Process> processList;
 	
-	public Mode(String modeName) {
+	public Mode(String modeName, boolean prevMode) throws FileNotFoundException, UnsupportedEncodingException {
 		
+		if(prevMode) {
+			this.modeFileName = modeName;
+			this.name = modeName.replace("_mode_file", "");
+			load();
+		} else {
 		this.name = modeName;
 		this.modeFileName = modeName + "_mode_file";
-	
+		PrintWriter out = new PrintWriter(this.modeFileName, "UTF-8");
+		}
 	}
 	
 	public boolean load() {
@@ -40,11 +48,12 @@ public class Mode {
 			
 		}
 		
+		modeFile.close();
 		return true;
 		
 	}
 	
-	public boolean newProcess(String newName, String filePath) {
+	public boolean add(String newName, String filePath) {
 		
 		Process newProcess = new Process(newName, filePath);
 		this.processList.add(newProcess);
@@ -73,10 +82,38 @@ public class Mode {
 		
 	}
 	
-	public boolean remove(String newName) {
+	public boolean remove(String name) {
+		
+		List<String> lines = new ArrayList<String>();
+		
+		try {
+			
+			File f = new File(this.modeFileName);
+			lines = Files.readAllLines(f.toPath(), Charset.defaultCharset());
+			Files.write(f.toPath(), removeLine(name, lines));
+			
+		} catch(IOException ex) {
+			
+			return false;
+			
+		}
 		
 		return true;
 		
+	}
+	
+	private List<String> removeLine(String name, List<String> lines) {
+		
+		List<String> newLines = new ArrayList<String>();
+		for(String line : lines) {
+			
+			String[] process = line.split(",");
+			if(process[0].equals(name)) continue;
+			else newLines.add(line);
+			
+		}
+		
+		return newLines;
 	}
 	
 	
