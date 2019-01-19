@@ -27,9 +27,14 @@ public class Mode {
 			
 		}
 		
+		this.processList = new ArrayList<Process>();
+		
 		while(modeFile.hasNextLine()) {
 			
-			
+			String line = modeFile.nextLine();
+			String[] currProcess = line.split(",");
+			Process curr = new Process(currProcess[0], currProcess[1]);
+			processList.add(curr);
 			
 		}
 		

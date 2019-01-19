@@ -4,7 +4,7 @@ public class Process {
 	
 	String filePath;
 	
-	public Process(String filePath) {
+	public Process(String name, String filePath) {
 		
 		this.filePath = filePath;
 		
