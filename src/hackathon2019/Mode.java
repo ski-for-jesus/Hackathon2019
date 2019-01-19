@@ -1,5 +1,7 @@
 package hackathon2019;
 import java.io.*;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
 import java.util.*;
 
 public class Mode {
@@ -44,7 +46,7 @@ public class Mode {
 		
 	}
 	
-	public boolean newProcess(String newName, String filePath) {
+	public boolean add(String newName, String filePath) {
 		
 		Process newProcess = new Process(newName, filePath);
 		this.processList.add(newProcess);
@@ -73,10 +75,38 @@ public class Mode {
 		
 	}
 	
-	public boolean remove(String newName) {
+	public boolean remove(String name) {
+		
+		List<String> lines = new ArrayList<String>();
+		
+		try {
+			
+			File f = new File(this.modeFileName);
+			lines = Files.readAllLines(f.toPath(), Charset.defaultCharset());
+			Files.write(f.toPath(), removeLine(name, lines));
+			
+		} catch(IOException ex) {
+			
+			return false;
+			
+		}
 		
 		return true;
 		
+	}
+	
+	private List<String> removeLine(String name, List<String> lines) {
+		
+		List<String> newLines = new ArrayList<String>();
+		for(String line : lines) {
+			
+			String[] process = line.split(",");
+			if(process[0].equals(name)) continue;
+			else newLines.add(line);
+			
+		}
+		
+		return newLines;
 	}
 	
 	
