@@ -104,9 +104,21 @@ public class ManagerView extends Application {
 		BorderPane bp = new BorderPane(mainCanvas);
 		ToolBar toolBar = new ToolBar();
 		Button create = new Button("Create");
+		Button edit = new Button("Edit");
+		Button back = new Button("Back");
 		Button delete = new Button("Delete");
-		toolBar.getItems().addAll(create, delete);
+		toolBar.getItems().addAll(create, edit, delete);
 		bp.setTop(toolBar);
+		edit.setOnAction(e -> {
+			toolBar.getItems().removeAll(create, edit, delete);
+			toolBar.getItems().add(back);
+			//loop through modes
+			//create buttons/link button to edit page for that mode
+			back.setOnAction(e1 -> {
+				toolBar.getItems().removeAll(back);
+				toolBar.getItems().addAll(create, edit, delete);
+			});
+		});
 		create.setOnAction(e -> {
 			displayCustomizationMenu(stage);
 		});
