@@ -5,11 +5,13 @@ import java.util.*;
 public class Mode {
 	
 	String name;
+	String modeFileName;
 	List<Process> processList;
 	
 	public Mode(String modeName) {
 		
 		this.name = modeName;
+		this.modeFileName = modeName + "_mode_file";
 	
 	}
 	
@@ -19,7 +21,7 @@ public class Mode {
 		
 		try {
 			
-		modeFile = new Scanner(new File(name + "_mode_file"));
+		modeFile = new Scanner(new File(this.modeFileName));
 		
 		} catch (Exception FileNotFoundException) {
 			
@@ -41,5 +43,36 @@ public class Mode {
 		return true;
 		
 	}
+	
+	public boolean newProcess(String newName, String filePath) {
+		
+		Process newProcess = new Process(newName, filePath);
+		this.processList.add(newProcess);
+		boolean outcome = appendModeFile(newName, filePath);
+		
+		return outcome;
+		
+	}
+	
+	private boolean appendModeFile(String newName, String filePath) {
+		
+		try(FileWriter fw = new FileWriter(this.modeFileName, true);
+			BufferedWriter bw = new BufferedWriter(fw);
+			PrintWriter out = new PrintWriter(bw)) {
+			
+			out.printf("%s,%s\n", newName, filePath);
+			out.close();
+			
+		} catch(IOException ex) {
+			
+			return false;
+			
+		}
+		
+		return true;
+		
+	}
+	
+	
 	
 }
