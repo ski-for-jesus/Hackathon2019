@@ -31,7 +31,6 @@ public class ManagerView extends Application {
 	
 	private void displayMainPage(Stage stage) {
 		BorderPane bp = new BorderPane();
-		TilePane tp = new TilePane();
 		Menu createM = new Menu("Create");
 		Menu deleteM = new Menu("Delete");
 		MenuItem newPref = new MenuItem("New Preference Set");
@@ -42,8 +41,11 @@ public class ManagerView extends Application {
 		MenuBar menuPane = new MenuBar();
 		menuPane.getMenus().add(createM);
 		menuPane.getMenus().add(deleteM);
-		bp.setCenter(tp);
+		int x = 100;
+		int y = 100;
+		Canvas canvas = new Canvas(x, y);
 		bp.setTop(menuPane);
+		bp.setCenter(canvas);
 		Scene scene = new Scene(bp);
 		stage.setScene(scene);
 		stage.show();
