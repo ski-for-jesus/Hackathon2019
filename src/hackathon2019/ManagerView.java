@@ -10,7 +10,12 @@ import java.net.URISyntaxException;
 import java.util.List;
 
 import javafx.application.Application;
+
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+
 import javafx.geometry.Insets;
+
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -31,14 +36,20 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 public class ManagerView extends Application {
+	private Boolean nameSet = false;
+	private String name;
+	private String path;
+	private File selected_file;
+	//private Mode newMode;
 	
 	public void start(Stage stage) throws Exception {
 		
 		displayMainPage(stage);
 	}
 	
-	private void displayCustomizationMenu(Stage stage) {
+	private void displayCustomizationMenu(Stage stage, ModeManager mm) {
 		Mode newMode;
+		//Boolean nameSet = false;
 		Canvas menuCanvas = new Canvas(700, 500);
 		AnchorPane menuBp = new AnchorPane(menuCanvas);
 		Scene menuScene = new Scene(menuBp);
@@ -60,6 +71,7 @@ public class ManagerView extends Application {
 		saveButton.setOnAction(e -> {
 			//SAVE STUFF HERE
 			//Check that Mode is valid (name input) and at least one proc in the object
+			// if(nameSet == true)
 			System.out.println("PUT THE SAVE STUFF IN HERE");
 			try {
 				displayMainPage(stage);
@@ -74,6 +86,37 @@ public class ManagerView extends Application {
 		Text nameText = new Text("Name: ");
 		TextField nameTextInput = new TextField();
 		nameTextInput.setPromptText("Enter mode name.");
+		Button set_name = new Button("Set Name");
+//		set_name.setOnAction(new EventHandler<ActionEvent>() -> {
+//			@Override
+//			public void handle(ActionEvent e) {
+//				
+//			}
+//			String name = nameTextInput.getText();
+//			if(name != null) {
+//				newMode = new Mode(name);
+//				nameSet = true;
+//			}else {
+//				nameTextInput.setPromptText("ENTER NAME BEFORE SET");
+//			}
+//		});
+		set_name.setOnAction(e -> {
+			name = nameTextInput.getText();
+			if(name != null) {
+				nameSet = true;
+				try {
+					mm.addMode(name);
+				}catch(FileNotFoundException e1){
+					e1.printStackTrace();
+				}catch(UnsupportedEncodingException e1){
+					e1.printStackTrace();
+				}
+			}else {
+				nameTextInput.setPromptText("ENTER NAME BEFORE SET");
+			}
+		});
+		
+		
 		
 		Text proccessText = new Text("Proccesses:");
 		nameTextInput.setLayoutX(50);
@@ -88,32 +131,48 @@ public class ManagerView extends Application {
 		saveButton.setLayoutY(350);
 		proccessText.setLayoutX(10);
 		proccessText.setLayoutY(400);
+		set_name.setLayoutX(300);
+		set_name.setLayoutY(30);
 		
 		// This is where the file chooser and new processes are added to the new mode
 		TextField proc_name = new TextField();
 		proc_name.setPromptText("Enter process name.");
 		Button choosefile = new Button("Select Process");
+		Button add_proc = new Button("Add Process");
 		choosefile.setOnAction(add -> {
 			FileChooser fc = new FileChooser();
-			File selected_file = fc.showOpenDialog(null);
-			
-			if (selected_file != null) {
-				String path;
-				path = selected_file.getAbsolutePath();
-				String procName = proc_name.getText();
-				// CHECK THE THIRD ARGUMENT OF CALL BELOW
-				Process newproc = new Process(procName, path, false);
-				System.out.println(path);
-			}else {
-				System.out.println("File is not Valid");
-			}
+			selected_file = fc.showOpenDialog(null);
+			path = selected_file.getAbsolutePath();
+			//String proccessname = proc_name.getText();
+			//System.out.println(proccessname);
 		});
+		
+		add_proc.setOnAction(e -> {
+			String proccessname = proc_name.getText();
+			if (path != null && proccessname != null) {
+				Mode foundmode = mm.getMode(name);
+				if (foundmode == null) {
+					System.out.println("ERROR HERE");
+					System.exit(1);
+				}
+				foundmode.add(proccessname, path, false);
+			}else {
+				System.out.println("File is not Valid or Name not set");
+			}	
+		});
+		
+		
 		
 		proc_name.setLayoutX(100);
 		proc_name.setLayoutY(70);
 		choosefile.setLayoutX(0);
 		choosefile.setLayoutY(70);
-		menuBp.getChildren().addAll(backButton, saveButton, nameText, nameTextInput, proccessText, choosefile, proc_name);
+		proc_name.setLayoutX(100);
+		proc_name.setLayoutY(70);
+		add_proc.setLayoutX(255);
+		add_proc.setLayoutY(70);
+		menuBp.getChildren().addAll(backButton, saveButton, nameText, nameTextInput, proccessText, choosefile, proc_name,
+				add_proc, set_name);
 		stage.setScene(menuScene);
 	}
 	
@@ -164,10 +223,20 @@ public class ManagerView extends Application {
 			});
 		});
 		create.setOnAction(e -> {
-			displayCustomizationMenu(stage);
+			displayCustomizationMenu(stage, mm);
 		});
 		Scene scene = new Scene(bp);
 		stage.setScene(scene);
 		stage.show();
+	}
+	
+	public void setNameHandler(ActionEvent event, Mode toUpdateMode, TextField nameText) {
+		String name = nameText.getText();
+		if(name != null) {
+			
+			nameSet = true;
+		}else {
+			nameText.setPromptText("ENTER NAME BEFORE SET");
+		}
 	}
 }

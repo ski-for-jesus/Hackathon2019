@@ -9,7 +9,7 @@ import java.util.Map;
 
 public class ModeManager {
 	
-	Map<String, Mode> modes;
+	private Map<String, Mode> modes;
 	
 	public ModeManager() throws FileNotFoundException, UnsupportedEncodingException {
 		
@@ -70,5 +70,11 @@ public class ModeManager {
 		Mode chosenMode = modes.get(modeName);
 		return chosenMode.execute();
 		
+	}
+	
+	public Mode getMode(String modeName) {
+		
+		if(!modes.containsKey(modeName)) return null;
+		return modes.get(modeName);
 	}
 }
