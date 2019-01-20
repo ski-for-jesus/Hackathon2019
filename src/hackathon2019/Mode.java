@@ -20,6 +20,7 @@ public class Mode {
 		this.name = modeName;
 		this.modeFileName = modeName + "_mode_file";
 		PrintWriter out = new PrintWriter(this.modeFileName, "UTF-8");
+		this.processList = new ArrayList<Process>();
 		}
 	}
 	
@@ -54,7 +55,6 @@ public class Mode {
 	}
 	
 	public boolean add(String newName, String filePath, boolean browser) {
-		
 		Process newProcess = new Process(newName, filePath, browser);
 		this.processList.add(newProcess);
 		boolean outcome = appendModeFile(newName, filePath, browser);

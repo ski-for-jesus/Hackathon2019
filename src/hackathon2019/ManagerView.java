@@ -37,6 +37,9 @@ import javafx.stage.Stage;
 
 public class ManagerView extends Application {
 	private Boolean nameSet = false;
+	private String name;
+	private String path;
+	private File selected_file;
 	//private Mode newMode;
 	
 	public void start(Stage stage) throws Exception {
@@ -44,7 +47,7 @@ public class ManagerView extends Application {
 		displayMainPage(stage);
 	}
 	
-	private void displayCustomizationMenu(Stage stage) {
+	private void displayCustomizationMenu(Stage stage, ModeManager mm) {
 		Mode newMode;
 		//Boolean nameSet = false;
 		Canvas menuCanvas = new Canvas(700, 500);
@@ -98,9 +101,16 @@ public class ManagerView extends Application {
 //			}
 //		});
 		set_name.setOnAction(e -> {
-			String name = nameTextInput.getText();
+			name = nameTextInput.getText();
 			if(name != null) {
 				nameSet = true;
+				try {
+					mm.addMode(name);
+				}catch(FileNotFoundException e1){
+					e1.printStackTrace();
+				}catch(UnsupportedEncodingException e1){
+					e1.printStackTrace();
+				}
 			}else {
 				nameTextInput.setPromptText("ENTER NAME BEFORE SET");
 			}
@@ -131,22 +141,27 @@ public class ManagerView extends Application {
 		Button add_proc = new Button("Add Process");
 		choosefile.setOnAction(add -> {
 			FileChooser fc = new FileChooser();
-			File selected_file = fc.showOpenDialog(null);
+			selected_file = fc.showOpenDialog(null);
+			path = selected_file.getAbsolutePath();
+			//String proccessname = proc_name.getText();
+			//System.out.println(proccessname);
+		});
+		
+		add_proc.setOnAction(e -> {
 			String proccessname = proc_name.getText();
-			if (selected_file != null && proccessname != null) {
-				String path;
-				path = selected_file.getAbsolutePath();
-				String procName = proc_name.getText();
-
-				//Process newproc = new Process(procName, path);
-				//MANAGER.GETMODE>ADDPROCCCESS HERE!!!
-				// CHECK THE THIRD ARGUMENT OF CALL BELOW
-
-				System.out.println(path);
+			if (path != null && proccessname != null) {
+				Mode foundmode = mm.getMode(name);
+				if (foundmode == null) {
+					System.out.println("ERROR HERE");
+					System.exit(1);
+				}
+				foundmode.add(proccessname, path, false);
 			}else {
 				System.out.println("File is not Valid or Name not set");
-			}
+			}	
 		});
+		
+		
 		
 		proc_name.setLayoutX(100);
 		proc_name.setLayoutY(70);
@@ -208,7 +223,7 @@ public class ManagerView extends Application {
 			});
 		});
 		create.setOnAction(e -> {
-			displayCustomizationMenu(stage);
+			displayCustomizationMenu(stage, mm);
 		});
 		Scene scene = new Scene(bp);
 		stage.setScene(scene);
