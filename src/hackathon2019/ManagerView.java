@@ -102,7 +102,7 @@ public class ManagerView extends Application {
 				path = selected_file.getAbsolutePath();
 				String procName = proc_name.getText();
 				// CHECK THE THIRD ARGUMENT OF CALL BELOW
-;				Process newproc = new Process(procName, path, false);
+				Process newproc = new Process(procName, path, false);
 				System.out.println(path);
 			}else {
 				System.out.println("File is not Valid");
