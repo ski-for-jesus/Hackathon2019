@@ -55,4 +55,20 @@ public class ModeManager {
 		modes.remove(name);
 		return true;
 	}
+	
+	public List<String> getNames() {
+		
+		List<String> names = new ArrayList<String>();
+		for(String name : this.modes.keySet()) {
+			names.add(name);
+		}
+		return names;
+	}
+	
+	public void execute(String modeName) {
+		
+		Mode chosenMode = modes.get(modeName);
+		chosenMode.execute();
+		
+	}
 }

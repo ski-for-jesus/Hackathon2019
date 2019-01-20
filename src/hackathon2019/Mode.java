@@ -116,6 +116,9 @@ public class Mode {
 		return newLines;
 	}
 	
-	
+	public void execute() {
+		
+		
+	}
 	
 }
