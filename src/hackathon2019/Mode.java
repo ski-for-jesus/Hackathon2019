@@ -57,19 +57,19 @@ public class Mode {
 		
 		Process newProcess = new Process(newName, filePath, browser);
 		this.processList.add(newProcess);
-		boolean outcome = appendModeFile(newName, filePath);
+		boolean outcome = appendModeFile(newName, filePath, browser);
 		
 		return outcome;
 		
 	}
 	
-	private boolean appendModeFile(String newName, String filePath) {
+	private boolean appendModeFile(String newName, String filePath, boolean browser) {
 		
 		try(FileWriter fw = new FileWriter(this.modeFileName, true);
 			BufferedWriter bw = new BufferedWriter(fw);
 			PrintWriter out = new PrintWriter(bw)) {
 			
-			out.printf("%s,%s\n", newName, filePath);
+			out.printf("%s,%s,%s\n", newName, filePath, Boolean.toString(browser));
 			out.close();
 			
 		} catch(IOException ex) {
