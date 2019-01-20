@@ -138,7 +138,6 @@ public class ManagerView extends Application {
 			}
 		}
 		
-		
 		ToolBar toolBar = new ToolBar();
 		Button create = new Button("Create");
 		Button edit = new Button("Edit");
@@ -149,10 +148,17 @@ public class ManagerView extends Application {
 		edit.setOnAction(e -> {
 			toolBar.getItems().removeAll(create, edit, delete);
 			toolBar.getItems().add(back);
-			//loop through modes
-			//create buttons/link button to edit page for that mode
+			if(!list.isEmpty()) {
+				for(String name: list) {
+					Button newButton = new Button(name);
+					newButton.setOnAction(e1-> {
+						//add edit functionality here
+					});		
+					toolBar.getItems().addAll(newButton);
+				}
+			}
 			back.setOnAction(e1 -> {
-				toolBar.getItems().removeAll(back);
+				toolBar.getItems().clear();
 				toolBar.getItems().addAll(create, edit, delete);
 			});
 		});
