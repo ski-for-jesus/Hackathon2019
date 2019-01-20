@@ -1,5 +1,8 @@
 package hackathon2019;
+import java.awt.Desktop;
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 
 public class Process {
 	
@@ -18,7 +21,16 @@ public class Process {
 	public boolean execute() {
 		
 		if(browser) {
-			
+			System.out.println(this.filePath);
+			try {
+				Desktop.getDesktop().browse(new URI(this.filePath));
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (URISyntaxException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		} else {
 			Runtime rt = Runtime.getRuntime();
 			try {

@@ -23,9 +23,11 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.ToolBar;
 import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
@@ -161,6 +163,32 @@ public class ManagerView extends Application {
 			}	
 		});
 		
+//		ToggleGroup group1 = new ToggleGroup();
+//		RadioButton applicationButton = new RadioButton("Application");
+//		applicationButton.setToggleGroup(group1);
+//		applicationButton.setSelected(true);
+//		RadioButton webpageButton = new RadioButton("Webpage");
+//		webpageButton.setToggleGroup(group1);
+		Button addWebpage = new Button("Add Webpage");
+		TextField web_url = new TextField();
+		web_url.setPromptText("Enter webpage url.");
+		TextField web_name = new TextField();
+		web_name.setPromptText("Enter webpage name.");
+		addWebpage.setOnAction(e -> {
+			String url = web_url.getText();
+			String webname = web_name.getText();
+			if (url != null && webname != null) {
+				Mode foundmode = mm.getMode(name);
+				if (foundmode == null) {
+					System.out.println("ERROR HERE");
+					System.exit(1);
+				}
+				foundmode.add(webname, url, true);
+			}else {
+				System.out.println("URL not set or name not set");
+			}
+		});
+		
 		
 		
 		proc_name.setLayoutX(100);
@@ -169,10 +197,21 @@ public class ManagerView extends Application {
 		choosefile.setLayoutY(70);
 		proc_name.setLayoutX(100);
 		proc_name.setLayoutY(70);
+		web_url.setLayoutX(0);
+		web_url.setLayoutY(110);
+		web_name.setLayoutX(170);
+		web_name.setLayoutY(110);
+		addWebpage.setLayoutX(325);
+		addWebpage.setLayoutY(110);
+		
 		add_proc.setLayoutX(255);
 		add_proc.setLayoutY(70);
+//		applicationButton.setLayoutX(350);
+//		applicationButton.setLayoutY(75);
+//		webpageButton.setLayoutX(440);
+//		webpageButton.setLayoutY(75);
 		menuBp.getChildren().addAll(backButton, saveButton, nameText, nameTextInput, proccessText, choosefile, proc_name,
-				add_proc, set_name);
+				add_proc, set_name, addWebpage, web_url,web_name);
 		stage.setScene(menuScene);
 	}
 	
