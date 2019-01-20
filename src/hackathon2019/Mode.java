@@ -43,7 +43,7 @@ public class Mode {
 			
 			String line = modeFile.nextLine();
 			String[] currProcess = line.split(",");
-			Process curr = new Process(currProcess[0], currProcess[1]);
+			Process curr = new Process(currProcess[0], currProcess[1], Boolean.valueOf(currProcess[2]));
 			processList.add(curr);
 			
 		}
@@ -53,9 +53,9 @@ public class Mode {
 		
 	}
 	
-	public boolean add(String newName, String filePath) {
+	public boolean add(String newName, String filePath, boolean browser) {
 		
-		Process newProcess = new Process(newName, filePath);
+		Process newProcess = new Process(newName, filePath, browser);
 		this.processList.add(newProcess);
 		boolean outcome = appendModeFile(newName, filePath);
 		
@@ -116,9 +116,13 @@ public class Mode {
 		return newLines;
 	}
 	
-	public void execute() {
+	public boolean execute() {
 		
-		
+		boolean result = true;
+		for(Process curr : this.processList) {
+			if(!curr.execute()) result = false;
+		}
+		return result;
 	}
 	
 }

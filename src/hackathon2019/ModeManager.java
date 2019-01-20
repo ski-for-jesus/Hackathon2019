@@ -65,10 +65,10 @@ public class ModeManager {
 		return names;
 	}
 	
-	public void execute(String modeName) {
+	public boolean execute(String modeName) {
 		
 		Mode chosenMode = modes.get(modeName);
-		chosenMode.execute();
+		return chosenMode.execute();
 		
 	}
 }
