@@ -1,13 +1,16 @@
 package hackathon2019;
  
 import java.io.File;
-
+import java.io.FileNotFoundException;
 import java.awt.Desktop;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.List;
 
 import javafx.application.Application;
+import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -41,7 +44,15 @@ public class ManagerView extends Application {
 		Scene menuScene = new Scene(menuBp);
 		Button backButton = new Button("Back");
 		backButton.setOnAction(e -> {
-			displayMainPage(stage);
+			try {
+				displayMainPage(stage);
+			} catch (FileNotFoundException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} catch (UnsupportedEncodingException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 		});
 		
 		//This is where the object is created 
@@ -50,7 +61,15 @@ public class ManagerView extends Application {
 			//SAVE STUFF HERE
 			//Check that Mode is valid (name input) and at least one proc in the object
 			System.out.println("PUT THE SAVE STUFF IN HERE");
-			displayMainPage(stage);
+			try {
+				displayMainPage(stage);
+			} catch (FileNotFoundException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} catch (UnsupportedEncodingException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 		});
 		Text nameText = new Text("Name: ");
 		TextField nameTextInput = new TextField();
@@ -97,11 +116,29 @@ public class ManagerView extends Application {
 		stage.setScene(menuScene);
 	}
 	
-	private void displayMainPage(Stage stage) {
+	private void displayMainPage(Stage stage) throws FileNotFoundException, UnsupportedEncodingException {
 		stage.setTitle("Shortcut to Shortcuts");
 		Canvas mainCanvas = new Canvas(400, 100);
-		mainCanvas.requestFocus();
 		BorderPane bp = new BorderPane(mainCanvas);
+		HBox hb = new HBox();
+		hb.setPadding(new Insets(8));
+		hb.setPrefHeight(90);
+		hb.setPrefWidth(400);
+		bp.setCenter(hb);
+		mainCanvas.requestFocus();
+		ModeManager mm = new ModeManager();
+		List<String> list = mm.getNames();
+		if(!list.isEmpty()) {
+			for(String name: list) {
+				Button newButton = new Button(name);
+				newButton.setOnAction(e-> {
+					mm.execute(name);
+				});
+				hb.getChildren().add(newButton);				
+			}
+		}
+		
+		
 		ToolBar toolBar = new ToolBar();
 		Button create = new Button("Create");
 		Button edit = new Button("Edit");
